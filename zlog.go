@@ -8,12 +8,14 @@ import (
 	"github.com/rs/zerolog"
 )
 
+// ZeroLogConfig used to configure the zerolog echo middleware
 type ZeroLogConfig struct {
 	Level  zerolog.Level
 	Output io.Writer
 	Fields map[string]interface{}
 }
 
+// ZeroLogWithConfig setup and return an echo middleware with zerolog logger available from the context.Context.
 func ZeroLogWithConfig(cfg ZeroLogConfig) echo.MiddlewareFunc {
 	if cfg.Output == nil {
 		cfg.Output = os.Stdout
