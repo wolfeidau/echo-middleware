@@ -10,6 +10,7 @@ import (
 
 // ZeroLogConfig used to configure the zerolog echo middleware
 type ZeroLogConfig struct {
+	Caller bool
 	Level  zerolog.Level
 	Output io.Writer
 	Fields map[string]interface{}
@@ -29,7 +30,13 @@ func ZeroLogWithConfig(cfg ZeroLogConfig) echo.MiddlewareFunc {
 		return func(c echo.Context) error {
 			ctx := c.Request().Context()
 
-			zl := zerolog.New(cfg.Output).Level(cfg.Level).With().Fields(cfg.Fields).Caller().Stack().Logger()
+			zc := zerolog.New(cfg.Output).Level(cfg.Level).With().Fields(cfg.Fields)
+
+			if cfg.Caller {
+				zc = zc.Caller()
+			}
+
+			zl := zc.Logger()
 
 			c.SetRequest(c.Request().WithContext(zl.WithContext(ctx)))
 
