@@ -7,11 +7,14 @@ import (
 	"testing"
 
 	"github.com/labstack/echo/v4"
-	"github.com/rs/zerolog/log"
 	"github.com/stretchr/testify/require"
 )
 
-func TestZeroLogWithConfig(t *testing.T) {
+func handler(c echo.Context) error {
+	return c.NoContent(200)
+}
+
+func TestZeroLogRequestWithConfig(t *testing.T) {
 
 	assert := require.New(t)
 
@@ -19,20 +22,18 @@ func TestZeroLogWithConfig(t *testing.T) {
 
 	e := echo.New()
 
+	e.Use()
+
 	req := httptest.NewRequest(http.MethodGet, "/login", nil)
 
 	rec := httptest.NewRecorder()
 	c := e.NewContext(req, rec)
 
-	h := ZeroLogWithConfig(ZeroLogConfig{Output: buf, Caller: true})(func(c echo.Context) error {
-		log.Ctx(c.Request().Context()).Info().Msg("woops")
-
-		return c.NoContent(200)
-	})
+	h := ZeroLogWithConfig(ZeroLogConfig{Output: buf, Caller: true})(ZeroLogRequestLog()(handler))
 
 	err := h(c)
 	assert.NoError(err)
-	assert.Contains(buf.String(), "woops")
-	assert.Contains(buf.String(), "info")
-	assert.Contains(buf.String(), "caller")
+	assert.Contains(buf.String(), "ip")
+	assert.Contains(buf.String(), "method")
+	assert.Contains(buf.String(), "status")
 }
