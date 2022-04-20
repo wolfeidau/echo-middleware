@@ -24,19 +24,19 @@ type NoCacheConfig struct {
 	Skipper middleware.Skipper
 }
 
-// NoCacheConfigLog returns a middleware which sets the no cache headers with default configuration.
-func NoCacheConfigLog() echo.MiddlewareFunc {
-	return NoCacheConfigLogWithConfig(NoCacheConfig{})
+// NoCache returns a middleware which sets the no cache headers with default configuration.
+func NoCache() echo.MiddlewareFunc {
+	return NoCacheWithConfig(NoCacheConfig{})
 }
 
-// NoCacheConfigLogWithConfig returns a middleware which sets a number of http headers to ensure the resource is not cached.
+// NoCacheWithConfig returns a middleware which sets a number of http headers to ensure the resource is not cached.
 //
 // As per http://wiki.nginx.org/HttpProxyModule - NoCache sets:
 //      Expires: Thu, 01 Jan 1970 00:00:00 UTC
 //      Cache-Control: no-cache, private, max-age=0
 //      X-Accel-Expires: 0
 //      Pragma: no-cache (for HTTP/1.0 proxies/clients)
-func NoCacheConfigLogWithConfig(config NoCacheConfig) echo.MiddlewareFunc {
+func NoCacheWithConfig(config NoCacheConfig) echo.MiddlewareFunc {
 	if config.Skipper == nil {
 		config.Skipper = middleware.DefaultSkipper
 	}

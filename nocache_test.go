@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestNoCacheConfigLogWithConfig(t *testing.T) {
+func TestNoCacheWithConfig(t *testing.T) {
 	assert := require.New(t)
 
 	e := echo.New()
@@ -19,7 +19,7 @@ func TestNoCacheConfigLogWithConfig(t *testing.T) {
 	rec := httptest.NewRecorder()
 	c := e.NewContext(req, rec)
 
-	h := NoCacheConfigLogWithConfig(NoCacheConfig{})(func(c echo.Context) error {
+	h := NoCacheWithConfig(NoCacheConfig{})(func(c echo.Context) error {
 		return c.NoContent(200)
 	})
 
