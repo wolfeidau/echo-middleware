@@ -3,6 +3,7 @@ package middleware
 import (
 	"io"
 	"os"
+	"reflect"
 
 	"github.com/labstack/echo/v4"
 	"github.com/rs/zerolog"
@@ -13,6 +14,7 @@ type ZeroLogConfig struct {
 	Caller bool
 	Level  zerolog.Level
 	Output io.Writer
+	Logger zerolog.Logger
 	Fields map[string]interface{}
 }
 
@@ -30,15 +32,16 @@ func ZeroLogWithConfig(cfg ZeroLogConfig) echo.MiddlewareFunc {
 		return func(c echo.Context) error {
 			ctx := c.Request().Context()
 
-			zc := zerolog.New(cfg.Output).Level(cfg.Level).With().Fields(cfg.Fields)
+			if reflect.ValueOf(cfg.Logger).IsZero() {
+				zc := zerolog.New(cfg.Output).Level(cfg.Level).With().Fields(cfg.Fields)
+				if cfg.Caller {
+					zc = zc.Caller()
+				}
 
-			if cfg.Caller {
-				zc = zc.Caller()
+				cfg.Logger = zc.Logger()
 			}
 
-			zl := zc.Logger()
-
-			c.SetRequest(c.Request().WithContext(zl.WithContext(ctx)))
+			c.SetRequest(c.Request().WithContext(cfg.Logger.WithContext(ctx)))
 
 			return next(c)
 		}
