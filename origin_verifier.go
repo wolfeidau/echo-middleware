@@ -10,7 +10,7 @@ import (
 
 const OriginVerifyHeaderName = "X-Origin-Verify"
 
-// OriginVerifierConfig used to configure the origin authentication middleware
+// OriginVerifierConfig used to configure the origin authentication middleware.
 type OriginVerifierConfig struct {
 	// Token used to validate requests coming include the required header
 	Token string
