@@ -7,7 +7,7 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 )
 
-// Unix epoch time
+// Unix epoch time.
 var epoch = time.Unix(0, 0).Format(time.RFC1123)
 
 // Taken from https://github.com/mytrile/nocache
@@ -18,7 +18,7 @@ var noCacheHeaders = map[string]string{
 	"X-Accel-Expires": "0",
 }
 
-// NoCacheConfig used to configure the no cache middleware
+// NoCacheConfig used to configure the no cache middleware.
 type NoCacheConfig struct {
 	// Skipper defines a function to skip middleware.
 	Skipper middleware.Skipper
@@ -32,10 +32,11 @@ func NoCache() echo.MiddlewareFunc {
 // NoCacheWithConfig returns a middleware which sets a number of http headers to ensure the resource is not cached.
 //
 // As per http://wiki.nginx.org/HttpProxyModule - NoCache sets:
-//      Expires: Thu, 01 Jan 1970 00:00:00 UTC
-//      Cache-Control: no-cache, private, max-age=0
-//      X-Accel-Expires: 0
-//      Pragma: no-cache (for HTTP/1.0 proxies/clients)
+//
+//	Expires: Thu, 01 Jan 1970 00:00:00 UTC
+//	Cache-Control: no-cache, private, max-age=0
+//	X-Accel-Expires: 0
+//	Pragma: no-cache (for HTTP/1.0 proxies/clients)
 func NoCacheWithConfig(config NoCacheConfig) echo.MiddlewareFunc {
 	if config.Skipper == nil {
 		config.Skipper = middleware.DefaultSkipper

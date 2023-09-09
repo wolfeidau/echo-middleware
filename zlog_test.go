@@ -13,14 +13,13 @@ import (
 )
 
 func TestZeroLogWithConfig(t *testing.T) {
-
 	assert := require.New(t)
 
 	buf := new(bytes.Buffer)
 
 	e := echo.New()
 
-	req := httptest.NewRequest(http.MethodGet, "/login", nil)
+	req := httptest.NewRequest(http.MethodGet, "/login", http.NoBody)
 
 	rec := httptest.NewRecorder()
 	c := e.NewContext(req, rec)
@@ -45,7 +44,7 @@ func TestZeroLogWithConfigLogger(t *testing.T) {
 
 	e := echo.New()
 
-	req := httptest.NewRequest(http.MethodGet, "/login", nil)
+	req := httptest.NewRequest(http.MethodGet, "/login", http.NoBody)
 
 	rec := httptest.NewRecorder()
 	c := e.NewContext(req, rec)

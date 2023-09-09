@@ -9,7 +9,7 @@ import (
 	"github.com/rs/zerolog"
 )
 
-// ZeroLogConfig used to configure the zerolog echo middleware
+// ZeroLogConfig used to configure the zerolog echo middleware.
 type ZeroLogConfig struct {
 	Caller bool
 	Level  zerolog.Level
@@ -45,6 +45,5 @@ func ZeroLogWithConfig(cfg ZeroLogConfig) echo.MiddlewareFunc {
 
 			return next(c)
 		}
-
 	}
 }

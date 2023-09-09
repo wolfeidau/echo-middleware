@@ -15,7 +15,6 @@ func handler(c echo.Context) error {
 }
 
 func TestZeroLogRequestWithConfig(t *testing.T) {
-
 	assert := require.New(t)
 
 	buf := new(bytes.Buffer)
@@ -24,7 +23,7 @@ func TestZeroLogRequestWithConfig(t *testing.T) {
 
 	e.Use()
 
-	req := httptest.NewRequest(http.MethodGet, "/login", nil)
+	req := httptest.NewRequest(http.MethodGet, "/login", http.NoBody)
 
 	rec := httptest.NewRecorder()
 	c := e.NewContext(req, rec)

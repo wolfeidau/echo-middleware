@@ -50,7 +50,7 @@ func TestOriginVerifierWithConfig(t *testing.T) {
 
 			e := echo.New()
 
-			req := httptest.NewRequest(http.MethodGet, "/login", nil)
+			req := httptest.NewRequest(http.MethodGet, "/login", http.NoBody)
 
 			for k, v := range tt.headers {
 				req.Header.Add(k, v)

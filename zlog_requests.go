@@ -8,7 +8,7 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-// ZeroLogRequestLogConfig defines the config for the request logger middleware
+// ZeroLogRequestLogConfig defines the config for the request logger middleware.
 type ZeroLogRequestLogConfig struct {
 	// Skipper defines a function to skip middleware.
 	Skipper middleware.Skipper
