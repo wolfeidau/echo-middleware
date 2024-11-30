@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"bytes"
+	"encoding/json"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -21,8 +22,6 @@ func TestZeroLogRequestWithConfig(t *testing.T) {
 
 	e := echo.New()
 
-	e.Use()
-
 	req := httptest.NewRequest(http.MethodGet, "/login", http.NoBody)
 
 	rec := httptest.NewRecorder()
@@ -32,7 +31,18 @@ func TestZeroLogRequestWithConfig(t *testing.T) {
 
 	err := h(c)
 	assert.NoError(err)
-	assert.Contains(buf.String(), "ip")
-	assert.Contains(buf.String(), "method")
-	assert.Contains(buf.String(), "status")
+
+	var m map[string]interface{}
+	err = json.Unmarshal(buf.Bytes(), &m)
+	assert.NoError(err)
+
+	// assert the map has the expected keys
+	assert.Contains(m, "method")
+	assert.Contains(m, "url")
+	assert.Contains(m, "status")
+	assert.Contains(m, "size")
+	assert.Contains(m, "dur")
+	assert.Contains(m, "ua")
+	assert.Contains(m, "remote-addr")
+	assert.Contains(m, "referer")
 }
