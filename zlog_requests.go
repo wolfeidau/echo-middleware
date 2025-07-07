@@ -31,22 +31,24 @@ func ZeroLogRequestLogWithConfig(config ZeroLogRequestLogConfig) echo.Middleware
 				return next(c)
 			}
 
-			req := c.Request()
-			res := c.Response()
 			start := time.Now()
 
 			if err = next(c); err != nil {
 				c.Error(err)
 			}
+			r := c.Request()
+			w := c.Response()
 
-			log.Ctx(c.Request().Context()).Info().Fields(map[string]interface{}{
-				"path":   req.URL.Path,
-				"method": req.Method,
-				"dur":    time.Since(start).String(),
-				"status": res.Status,
-				"length": res.Size,
-				"ip":     c.RealIP(),
-			}).Msg("processed request")
+			log.Ctx(r.Context()).Info().
+				Str("method", r.Method).
+				Str("url", r.URL.String()).
+				Int("status", w.Status).
+				Int64("size", w.Size).
+				Int64("dur", time.Since(start).Milliseconds()).
+				Str("ua", r.UserAgent()).
+				Str("remote-addr", r.RemoteAddr).
+				Str("referer", r.Referer()).
+				Msg("request")
 
 			return err
 		}
